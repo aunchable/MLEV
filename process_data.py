@@ -18,7 +18,7 @@ def split_timeseries(ts):
         if ts[i] > 0 and not in_curr:
             curr_start = i
             in_curr = True
-        elif ts[i] == 0 and in_curr:
+        elif ts[i] <= 0 and in_curr:
             if ts[i-1] > 0:
                 num_zeros = 0
             num_zeros += 1
