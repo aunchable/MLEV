@@ -5,7 +5,7 @@ import scipy as sp
 from scipy import signal
 from scipy import optimize
 
-INPUTPATH = '/Users/anshulramachandran/Downloads/Caltech-CA-320_Actual.csv'
+INPUTPATH = '/Users/anshulramachandran/Downloads/Influx Data - JPL/JPL-EV-L2-57_Actual.csv'
 
 THRESHOLD = 0.20
 
@@ -110,34 +110,34 @@ def getAllFitParameters(charging_profile):
     errors = {}
 
     p, e = optimize.curve_fit(lin, x, y)
-    squared_error = squared_error(y, lin(x, *p))
-    params['lin'] = *p
-    errors['lin'] = squared_error
+    sq = squared_error(y, lin(x, *p))
+    params['lin'] = p
+    errors['lin'] = sq
 
     p, e = optimize.curve_fit(exp, x, y)
-    squared_error = squared_error(y, exp(x, *p))
-    params['exp'] = *p
-    errors['exp'] = squared_error
+    sq = squared_error(y, exp(x, *p))
+    params['exp'] = p
+    errors['exp'] = sq
 
     p, e = optimize.curve_fit(lin_lin, x, y)
-    squared_error = squared_error(y, lin_lin(x, *p))
-    params['lin_lin'] = *p
-    errors['lin_lin'] = squared_error
+    sq = squared_error(y, lin_lin(x, *p))
+    params['lin_lin'] = p
+    errors['lin_lin'] = sq
 
     p, e = optimize.curve_fit(exp_lin, x, y)
-    squared_error = squared_error(y, exp_lin(x, *p))
-    params['exp_lin'] = *p
-    errors['exp_lin'] = squared_error
+    sq = squared_error(y, exp_lin(x, *p))
+    params['exp_lin'] = p
+    errors['exp_lin'] = sq
 
     p, e = optimize.curve_fit(lin_exp, x, y)
-    squared_error = squared_error(y, lin_exp(x, *p))
-    params['lin_exp'] = *p
-    errors['lin_exp'] = squared_error
+    sq = squared_error(y, lin_exp(x, *p))
+    params['lin_exp'] = p
+    errors['lin_exp'] = sq
 
     p, e = optimize.curve_fit(exp_exp, x, y)
-    squared_error = squared_error(y, exp_exp(x, *p))
-    params['exp_exp'] = *p
-    errors['exp_exp'] = squared_error
+    sq = squared_error(y, exp_exp(x, *p))
+    params['exp_exp'] = p
+    errors['exp_exp'] = sq
 
     return params, errors
 
@@ -145,7 +145,7 @@ def getAllFitParameters(charging_profile):
 #TODO(anyone): make this more general
 def chooseBestFit(params, errors):
     bestFits = {}
-    for k, v in num_params:
+    for k, v in num_params.items():
         least_error = 1000000.
         best_fit_name = ''
         for fit in v:
@@ -158,3 +158,12 @@ def chooseBestFit(params, errors):
         return params[bestFits['2']], errors[bestFits['2']]
     else:
         return params[bestFits['4']], errors[bestFits['4']]
+
+
+ts = get_timeseries(INPUTPATH)
+data = split_timeseries(ts)
+print len(data)
+params, errors = getAllFitParameters(data[25])
+print params, errors
+p, e = chooseBestFit(params, errors)
+print p, e
