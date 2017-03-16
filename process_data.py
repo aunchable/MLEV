@@ -155,9 +155,9 @@ def chooseBestFit(params, errors):
         bestFits[k] = best_fit_name
 
     if errors[bestFits['2']] < errors[bestFits['4']] + THRESHOLD:
-        return params[bestFits['2']], errors[bestFits['2']]
+        return bestFits['2'], params[bestFits['2']], errors[bestFits['2']]
     else:
-        return params[bestFits['4']], errors[bestFits['4']]
+        return bestFits['4'], params[bestFits['4']], errors[bestFits['4']]
 
 
 ts = get_timeseries(INPUTPATH)
@@ -165,5 +165,5 @@ data = split_timeseries(ts)
 print len(data)
 params, errors = getAllFitParameters(data[25])
 print params, errors
-p, e = chooseBestFit(params, errors)
-print p, e
+fit, p, e = chooseBestFit(params, errors)
+print fit, p, e
