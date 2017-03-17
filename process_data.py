@@ -187,9 +187,9 @@ def getFitData(root_path, out_path, threshold):
 			print fit_info
 
 			for fit_param in fit_info:
-				fitData.write(str(fit_param) + ", ")
+				fitData.write(str(fit_param) + ",")
 
-			fitData.write("\n")
+			fitData.write('\n')
 
 	fitData.close()
 
